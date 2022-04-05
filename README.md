@@ -1,6 +1,7 @@
-git clone https://github.com/scaffold-eth/scaffold-eth-challenges challenge-2-token-vendor
-cd challenge-2-token-vendor
-git checkout challenge-2-token-vendor
+git clone https://github.com/IhuomaO/Nestcoin-buterin nestcoin-buterin
+
+cd nestcoin-buterin
+
 yarn install
 
 **You'll have three terminals up for:**
