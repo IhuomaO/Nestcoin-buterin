@@ -1,11 +1,8 @@
-import React from 'react'
+import React from "react";
+import CouponSection from "../Sections/CouponSection";
 
 const Dashboard = () => {
-  return (
-    <div>
-      Dashboard
-    </div>
-  )
-}
+  return <CouponSection />;
+};
 
-export default Dashboard
+export default Dashboard;
