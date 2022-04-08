@@ -2,7 +2,7 @@ import React from 'react'
 import CouponSection from "../Sections/CouponSection";
 import TransferToken from '../Sections/TransferToken';
 
-const Dashboard = () => {
+const User = () => {
 
 
   return (
@@ -18,4 +18,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default User;
