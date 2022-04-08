@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "./Button";
 
 const Card = ({ id, bgImage, body, value, name }) => {
   return (
@@ -10,9 +11,7 @@ const Card = ({ id, bgImage, body, value, name }) => {
           <p className="text-gray-600 leading-5 mb-4">{body}</p>
           <input type="hidden" value={id} />
           <p className="text-2xl font-thin mb-6">{value} BTR</p>
-          <button className="text-indigo-500 px-4 py-3 bg-gray-300 rounded hover:bg-indigo-500 hover:text-white transition duration-300 inline-flex items-center justify-center leading-snug">
-            Get Reward
-          </button>
+          <Button>Get Reward</Button>
         </div>
       </div>
     </div>
