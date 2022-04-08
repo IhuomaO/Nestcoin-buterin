@@ -6,109 +6,220 @@ import "./YourToken.sol";
 
 contract Vendor is Ownable {
 
-  // how do we get the rewards into the contract???
-   struct rewards {
-      string name;
-      string description;
-      uint256 amount;
-  }
+ //Variables
+    address public _owner;
 
-  // To track ownership of rewards
-   mapping (address => rewards[]) public rewardOwner;
+    YourToken public yourToken;
 
-  // To track properties of reward
-   mapping (string => uint256) public rewardProperties;
+    address[] public _loyalCustomers; //an array of loyal customers
 
-  // To keep track of how many tokens each address received
-  mapping (address => uint256) public tokenTrialDrops;
+    mapping(address => uint256) public _balances; //mapping of balances
 
-  // To track balances on addresses
-  mapping(address => uint) public balances;
+    _Reward[] public _rewardsPool; //array to hold all the rewards available
 
-  
-  // array of loyal customer's addresses & how do we get this too???
-  address[]  listOfCustomersAddresses;
+    struct _Reward {
+        uint8 id;
+        string rewardName;
+        uint256 rewardCost;
+    } //basic template of a reward
 
-  //
-  uint256 public dropUnitPrice;
+    //function to create a reward
+    function _addReward(
+        uint8 id,
+        string memory rewardName,
+        uint256 rewardCost
+    ) public {
+        _rewardsPool.push(_Reward(id, rewardName, rewardCost));
+    }
 
-  //event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
+    //function to create all rewards
+    function _createRewardPool() internal {
+        _addReward(0, "Couples Coupon", 10);
+        _addReward(1, "LateNight Movie", 20);
+        _addReward(2, "Backstage Pass", 30);
+        _addReward(3, "Birthday Pass", 40);
+        _addReward(4, "Kiddies Fun", 50);
+    }
 
-   // Emit event on successful distribution of tokens to loyal customers
-   event TokenAirdrop( address vendor, address addressOfToken, uint256 numOfRecipients);
+    uint8[] public _purchasedRewardsID; //this is an array of Ids but it is always empty at the beginning of the SC.
+    mapping(address => uint8[]) public _purchasedRewards; //mapping holds the addresses to the purchased rewards array.
 
-  YourToken public yourToken;
+    // constructor() ERC20("Buterite", "BTR") {
+    //     _owner = msg.sender;
+    //     _createRewardPool(); //function to create all available rewards
+    // }
 
-  constructor(address tokenAddress) {
-    yourToken = YourToken(tokenAddress);
-  }
+    constructor(address tokenAddress) {
+       yourToken = YourToken(tokenAddress);
+        _owner = msg.sender;
+        _createRewardPool(); //function to create all available rewards
 
-  /**
-  * @notice Allow vendor to transfer token to loyal customers
-  */
-      // function batchTokensTransfer(  _yourToken, _usersWithdrawalAccounts, _amounts ) public ownerOnly {
-      //   require(_usersWithdrawalAccounts.length == _amounts.length);
-      //     for (uint i = 0; i < _usersWithdrawalAccounts.length; i++) {
-      //         if (_usersWithdrawalAccounts[i] != 0x0) {
-      //           _yourToken.transfer(_usersWithdrawalAccounts[i], _amounts[i]);
-      //         }
-      //     }
-      // }
+    }
 
-      function multiValueTokenAirdrop(address _addressOfToken,  address[] memory _recipients, uint256[] memory _values ) public payable returns(bool) {
-          ERCInterface token = ERCInterface(_addressOfToken);
-          require(_recipients.length == _values.length, "Total number of recipients and values are not equal");
 
-          uint256 price = _recipients.length.mul(dropUnitPrice);
+    //ADMIN FUNCTIONS
+    //ADMIN FUNCTIONS
+    //ADMIN FUNCTIONS
 
-          require( msg.value >= price, "Not enough ETH sent with transaction!");
-          
-          for(uint i = 0; i < _recipients.length; i++) {
-              if(_recipients[i] != address(0) && _values[i] > 0) {
-                  token.transferFrom(msg.sender, _recipients[i], _values[i]);
-              }
-          }
-          emit TokenAirdrop(msg.sender, _addressOfToken, _recipients.length);
-          return true;
-
+    //function to check if a customer's address is in the array
+    function _isLoyalCustomer(address _address)
+        public
+        view
+        returns (bool, uint256)
+    {
+        for (uint256 s = 0; s < _loyalCustomers.length; s += 1) {
+            if (_address == _loyalCustomers[s]) return (true, s);
         }
-
-  // ToDo: create a transferTokens() function:
-      function transferTokens( address _receiver, uint256 tokenAmountToTransfer) public {
-        // Check that the requested amount of tokens to sell is more than 0
-        require(tokenAmountToTransfer > 0, "Specify an amount of token greater than zero");
-
-        (bool sent) = yourToken.transferFrom(msg.sender, _receiver, tokenAmountToTransfer);
-        require(sent, "Failed to transfer tokens between customers");
-
- 
-      }
-
-  // To allow a customer to view balance.
-      function viewBalance (address _to) {
-        balanceOf[_to];                         
+        return (false, 0);
     }
 
-  // To allow customers exchange their tokens for rewards.
-     function exchangeTokens( chosenRewards[] ) public {
-        // Check that the chosen number of rewards to exchange is more than 0
-        require(chosenRewards.length > 0, "A reward item must be chosen");
-
-        // Check that the user's token balance is enough to do the swap. We need to determine to sum all the value for the rewards in the array if it is more than one reward
-        uint256 userBalance = yourToken.balanceOf(msg.sender);
-        require(userBalance >= chosenRewards.value , "Your token balance is insufficient to claim the reward");
-     
-       // Transfer/Burn token to vendor 
-         (bool sent) = yourToken.transferFrom(msg.sender, address(this), chosenRewards.value);
-          require(sent, "Failed to transfer tokens from user to vendor");
-
-      // Update customer's address as owner of reward(s), how do we do this??
-
-     }
-
-  // To allow a customer to view  reward(s).
-      function viewRewards (address _to) {
-                                
+    // YET TO BE TESTED!!!**
+    //ADMIN FUNCTION 01
+    //this adds a loyal customer to the loyalCustomer Array
+    function _addLoyalCustomer(address _loyalCustomer) public {
+        require(msg.sender == _owner, "Only the Owner can add new customers");
+        (bool isLoyalCustomer, ) = _isLoyalCustomer(_loyalCustomer);
+        require(isLoyalCustomer != true, "Can't add Address twice");
+        _loyalCustomers.push(_loyalCustomer);
+        //add the customer to the mapping that stores the purchased rewards and assign an empty array of IDs to him.
+        _purchasedRewards[_loyalCustomer] = _purchasedRewardsID;
     }
 
+    //ADMIN FUNCTION 01
+    //function allows the owner to send reward tokens to loyal customers
+    function _rewardLoyalCustomers(address _loyalCustomer, uint256 _amount)
+        public
+        payable
+    {
+        require(msg.sender == _owner, "Only the Owner can reward customers");
+        require(
+            yourToken.balanceOf(msg.sender) > _amount,
+            "Insufficient Balance for NestOil"
+        );
+        (bool isLoyalCustomer, ) = _isLoyalCustomer(_loyalCustomer);
+        require(
+            isLoyalCustomer == true,
+            "Can't reward this Address. Not a loyal Customer"
+        );
+        yourToken.transfer(_loyalCustomer, _amount);
+    }
+
+    //ADMIN FUNCTIONS 03
+    //function to return admin balance
+    function _viewAdminBalance() public view returns (uint256) {
+        return yourToken.balanceOf(_owner);
+    }
+
+    //ADMIN FUNCTIONS 04
+    //function to return a list of all the loyalCustomers
+    function _viewAllLoyalCustomers() public view returns (address[] memory) {
+        return _loyalCustomers;
+    }
+
+    //USER FUNCTIONS
+    //USER FUNCTIONS
+    //USER FUNCTIONS
+
+    //USER FUNCTIONS 02
+    //function to return user balance
+    function _viewUserBalance(address _loyalCustomerAddress)
+        public
+        view
+        returns (uint256)
+    {
+        return yourToken.balanceOf(_loyalCustomerAddress);
+    }
+
+    //USER FUNCTIONS 03
+    //function allows loyalCustomers to transfer tokens between themselves.
+    function _loyalCustomersTransferTokens(address _to, uint256 _amount)
+        public
+        payable
+    {
+        (bool isLoyalCustomer, ) = _isLoyalCustomer(_to);
+        require(
+            isLoyalCustomer == true,
+            "Only a loyal customer is allowed to receive Tokens"
+        );
+        require(_amount > 0, "You can't transfer 0 tokens");
+        require(yourToken.balanceOf(msg.sender) > _amount, "Insufficient Balance");
+        yourToken.transfer(_to, _amount);
+    }
+
+    // YET TO BE TESTED!!!**
+    //USER FUNCTIONS 06
+    function _purchaseRewards(uint8[] memory chosenIds) public payable {
+        (bool isLoyalCustomer, ) = _isLoyalCustomer(msg.sender);
+        require(
+            isLoyalCustomer == true,
+            "Only a loyal customer is allowed to purchase these Items"
+        );
+        uint256 _totalCost = _findTotalCost(chosenIds);
+        require(_totalCost > 0, "You must click an Item");
+        require(yourToken.balanceOf(msg.sender) > _totalCost, "Insufficient Funds");
+        yourToken.burn(_totalCost);
+        _updatePurchasedRewardsMapping(msg.sender, chosenIds); //update the mapping variable that tracks a users address to purchased Rewards
+    }
+
+    // YET TO BE TESTED!!!**
+    //HELPER FUNCTION 01
+    function _findTotalCost(uint8[] memory chosenIds)
+        public
+        view
+        returns (uint256)
+    {
+        uint256 _totalCost = 0;
+        for (uint256 s = 0; s < chosenIds.length; s += 1) {
+            uint8 chosenRewardID = chosenIds[s];
+            uint256 chosenRewardCost = _rewardsPool[chosenRewardID].rewardCost;
+            _totalCost += chosenRewardCost;
+        }
+        return _totalCost;
+    }
+
+    // YET TO BE TESTED!!!**
+    //HELPER FUNCTION 02
+    //function that updates the list of items purchased
+    function _addTwoArrays(address _address, uint8[] memory _justPurchased)
+        public
+        returns (uint8[] memory)
+    {
+        uint8[] storage _updatedList = _purchasedRewards[_address]; //create an array that references the existing one in the mapping
+        for (uint256 s = 0; s < _justPurchased.length; s += 1) {
+            _updatedList.push(_justPurchased[s]); //add the items from the new one to the old one
+        }
+        return _updatedList; //final array is updated
+    }
+
+    //HELPER FUNCTION 03
+    //function that replaces the _purchasedRewards mapping with the new array after combining
+    function _updatePurchasedItems(
+        uint8[] memory _updatedList,
+        address _address
+    ) public {
+        _purchasedRewards[_address] = _updatedList;
+    }
+
+    //HELPER FUNCTION 04
+    //function that retrieves the array list of uint8 ids from the exsitiing _purchasedRewards mapping
+    function _getListOfExistingPurchasedItems(address _address)
+        public
+        view
+        returns (uint8[] memory)
+    {
+        (bool isLoyalCustomer, ) = _isLoyalCustomer(_address);
+        require(isLoyalCustomer == true, "You are checking an Illegal Address");
+        return _purchasedRewards[_address];
+    }
+
+    function _updatePurchasedRewardsMapping(
+        address _address,
+        uint8[] memory chosenIds
+    ) public {
+        uint8[] memory _existingIds;
+        _existingIds = _getListOfExistingPurchasedItems(_address); //HELPER FUNCTION 04
+        uint8[] memory _updatedListIds;
+        _updatedListIds = _addTwoArrays(_address, chosenIds); //HELPER FUNCTION 02
+        _updatePurchasedItems(_updatedListIds, _address); //HELPER FUNCTION 03
+    }
 }
