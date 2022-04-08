@@ -44,10 +44,6 @@ contract Vendor is Ownable {
     uint8[] public _purchasedRewardsID; //this is an array of Ids but it is always empty at the beginning of the SC.
     mapping(address => uint8[]) public _purchasedRewards; //mapping holds the addresses to the purchased rewards array.
 
-    // constructor() ERC20("Buterite", "BTR") {
-    //     _owner = msg.sender;
-    //     _createRewardPool(); //function to create all available rewards
-    // }
 
     constructor(address tokenAddress) {
        yourToken = YourToken(tokenAddress);

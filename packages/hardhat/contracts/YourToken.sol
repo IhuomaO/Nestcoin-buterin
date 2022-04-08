@@ -11,8 +11,6 @@ contract YourToken is ERC20, ERC20Burnable, Ownable  {
 
     constructor() ERC20("Buterite", "BTR") {
          _mint(msg.sender, 1000 * 10 ** 18);
-         // _owner = msg.sender;
-      //   _createRewardPool(); //function to create all available rewards
     }
 
     //ADMIN FUNCTION 02
