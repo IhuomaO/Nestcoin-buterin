@@ -69,6 +69,21 @@ contract Vendor is Ownable {
         return (false, 0);
     }
 
+    //function to check if list provided in array is the actual list of loyal customers
+    function _isListActual(address[] memory _arrayOfLoyalCustomers)
+        public 
+        view
+        returns(bool, uint256)
+    {
+        for(uint i = 0; i < _arrayOfLoyalCustomers.length; i++)
+            {
+                if(_arrayOfLoyalCustomers[i] == _loyalCustomers[i]){
+                 return (true, i);
+            }
+                return (false, 0);
+    }
+}
+
     // YET TO BE TESTED!!!**
     //ADMIN FUNCTION 01
     //this adds a loyal customer to the loyalCustomer Array
@@ -81,7 +96,7 @@ contract Vendor is Ownable {
         _purchasedRewards[_loyalCustomer] = _purchasedRewardsID;
     }
 
-    //ADMIN FUNCTION 01
+    //ADMIN FUNCTION 02
     //function allows the owner to send reward tokens to loyal customers
     function _rewardLoyalCustomers(address _loyalCustomer, uint256 _amount)
         public
@@ -110,6 +125,42 @@ contract Vendor is Ownable {
     //function to return a list of all the loyalCustomers
     function _viewAllLoyalCustomers() public view returns (address[] memory) {
         return _loyalCustomers;
+    }
+
+    //ADMIN FUNCTIONS 05
+    //function that allows for sending(batching) of transactions to multiple addresses at once
+    //_arrayOfloyalCustomers = array of loyal customer addresses
+    //_amount = The amount of tokens all addresses will receive
+    function multiSendTokensToCustomers(address[] memory _arrayOfLoyalCustomers, uint256 _amount) 
+        public 
+        payable 
+        returns(bool)
+    {
+        require(msg.sender == _owner,"Not the owner");
+
+        uint256 vendorBalance = yourToken.balanceOf(address(this));
+
+        require(vendorBalance >= _amount, "Insufficient Balance to send tokens");
+
+        (bool isActual, ) = _isListActual(_arrayOfLoyalCustomers);
+        require(
+            isActual == true,
+            "Can't reward these addresses. Not the actual list"
+        );
+
+        for(uint i = 0; i < _loyalCustomers.length && i <= 200; i++) {
+            if(_loyalCustomers[i] != address(0)) {
+            yourToken.transfer(_loyalCustomers[i], _amount);
+            }
+        }
+        return true;
+    }
+
+    ///ADMIN FUNCTIONS 06
+    //function to self destruct
+    function selfDestruct(address _address) public { 
+        require(msg.sender == _owner, "only the owner can call self destruct");
+        selfdestruct(payable(_address)); 
     }
 
     //USER FUNCTIONS
