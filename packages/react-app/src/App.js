@@ -2,17 +2,20 @@ import { useState } from 'react';
 import './App.css';
 import Layout from './Components/Layout'
 import UserDashboard from './Views/UserDashboard';
+import AdminDashboard from './Views/AdminDashboard';
 
 function App() {
   const [page, setPage] = useState(0)
   const pageHandler = (index) => {
     setPage(index)
   }
-  const NotCreated = ()=> <div>Not Created yet</div>
-  return (
-    <Layout pageHandler={pageHandler}>
+  const NotCreated = () => <div>Not Created yet</div>
 
-      {page === 2 ? <UserDashboard /> : <NotCreated/>}
+  return (
+    <Layout page={page} pageHandler={pageHandler} className='font-nunito'>
+      {page === 0 && <NotCreated />}
+      {page === 1 && <AdminDashboard />}
+      {page === 2 && <UserDashboard />}
     </Layout>
   );
 }

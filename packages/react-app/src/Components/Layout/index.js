@@ -1,10 +1,10 @@
 import React from 'react'
 import Nav from './Nav'
 
-const index = ({ children, pageHandler, ...props }) => {
+const index = ({ children, page, pageHandler, ...props }) => {
   return (
     <div {...props}>
-      <Nav pageHandler={pageHandler} />
+      <Nav page={page} pageHandler={pageHandler} />
       {children}
     </div>
   )
