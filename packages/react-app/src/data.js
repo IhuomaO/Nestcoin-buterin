@@ -1,8 +1,8 @@
-import couples from "./Assets/couples.jpg";
-import backstage from "./Assets/backstages.jpg";
-import midnight from "./Assets/midnight.jpg";
-import birthday from "./Assets/birthday.jpg";
-import kiddies from "./Assets/kiddies.jpg";
+import couples from "./assets/couples.jpg";
+import backstage from "./assets/backstages.jpg";
+import midnight from "./assets/midnight.jpg";
+import birthday from "./assets/birthday.jpg";
+import kiddies from "./assets/kiddies.jpg";
 export const CardInformation = [
   {
     id: 1,
