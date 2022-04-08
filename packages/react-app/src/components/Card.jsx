@@ -4,7 +4,7 @@ const Card = ({ id, bgImage, body, value, name }) => {
   return (
     <div className="lg:w-1/3 w-full mb-6 lg:p-3">
       <div className="bg-gray-200 rounded-xl">
-        <img src={bgImage} className="max-w-full h-auto" alt={bgImage} />
+        <img src={bgImage} className="w-full h-72" alt={bgImage} />
         <div className="px-6 pb-6 pt-3">
           <h2 className="text-xl font-bold mb-2 uppercase">{name}</h2>
           <p className="text-gray-600 leading-5 mb-4">{body}</p>
