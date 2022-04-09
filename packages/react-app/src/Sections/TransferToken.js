@@ -28,7 +28,7 @@ const TransferToken = ({ title, onChangeAddress, onChangeAmount, valueAddress, v
 
       <Input label={'Amount'}
         onChange={onChangeAmount || ((e) => {
-          if (isNaN(e.target.value)) return 0
+          if (isNaN(e.target.value)) return
           setSendAmount(() => e.target.value);
         })}
         name='Amount' placeholder='Amount to send in BTU'

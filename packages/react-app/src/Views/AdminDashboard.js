@@ -31,7 +31,10 @@ const AdminDashboard = () => {
       </div>
       <TransferToken title='Add Loyal Customer'
         onChangeAddress={(e) => setSendAddress(() => e.target.value)}
-        onChangeAmount={(e) => setSendAmount(() => e.target.value)}
+        onChangeAmount={(e) => {
+          if (isNaN(e.target.value)) return;
+          setSendAmount(() => e.target.value)
+        }}
         valueAddress={sendAddress}
         valueAmount={sendAmount}
         submit={handleSubmit}
