@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Web3 from "web3";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
-import { isValidAddress } from '../Utils/helpers/CheckAddress';
+// import { isValidAddress } from '../Utils/helpers/CheckAddress';
 
 const TransferToken = () => {
   const [sendAddress, setSendAddress] = useState("");
