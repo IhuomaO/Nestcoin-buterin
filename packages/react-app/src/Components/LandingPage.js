@@ -1,5 +1,5 @@
 import React from "react";
-import backstages from "../Assets/backstages.jpg";
+import backstages from "../assets/backstages.jpg";
 import "../App.css";
 
 function LandingPage() {
