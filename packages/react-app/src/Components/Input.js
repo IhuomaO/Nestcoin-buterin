@@ -21,6 +21,7 @@ Input.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
   placeholder: PropTypes.string,
+
   type: PropTypes.oneOf(["address", "amount"]),
 };
 

@@ -1,6 +1,8 @@
 import React from "react";
 import CouponSection from "../Sections/CouponSection";
-import TransferToken from "../Sections/TransferToken";
+import TransferToken from '../Sections/TransferToken';
+import Balance from '../Components/Balance';
+
 
 const User = () => {
   return (
@@ -8,7 +10,7 @@ const User = () => {
       <div className="w-full text-center text-4xl uppercase py-20">
         Balance heading
       </div>
-
+      <Balance />
       <TransferToken />
       <CouponSection />
     </div>

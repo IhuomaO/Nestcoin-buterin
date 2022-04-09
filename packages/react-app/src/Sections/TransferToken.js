@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Web3 from "web3";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
+import { isValidAddress } from '../Utils/helpers/CheckAddress';
 
 const TransferToken = () => {
   const [sendAddress, setSendAddress] = useState("");
@@ -22,6 +23,7 @@ const TransferToken = () => {
   };
 
   return (
+
     <form
       id="transfer"
       className="w-[550px] lg:w-[800px] py-10 rounded-md shadow hover:shadow-xl transition duration-300 bg-white mx-auto flex flex-col border text-center space-y-5"
