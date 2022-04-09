@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from 'react';
-
-import { requestAccount } from "../../Utils/helpers/ConnectMetamask.helper";
 import Button from "../Button";
+import { requestAccount } from "../../Utils/helpers/ConnectMetamask.helper";
+
+
 const Nav = ({ pageHandler, connectWallet }) => {
   const links = ["Home", "Admin", "User"];
   const [walletAddress, setWalletAddress] = useState("");
@@ -28,6 +29,7 @@ const Nav = ({ pageHandler, connectWallet }) => {
           Connect
         </Button>
       </div>
+      
     </div>
   );
 };
