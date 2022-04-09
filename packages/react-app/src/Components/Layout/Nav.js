@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../Button";
+import Balance from '../Balance';
 
 const Nav = ({ pageHandler, connectWallet }) => {
   const links = ["Home", "Admin", "User"];
@@ -17,12 +18,9 @@ const Nav = ({ pageHandler, connectWallet }) => {
             {link}
           </div>
         ))}
+        <Balance />
       </nav>
-      <div className="w-40 ">
-        <Button className="mx-auto" onClick={() => connectWallet()}>
-          Connect
-        </Button>
-      </div>
+      
     </div>
   );
 };

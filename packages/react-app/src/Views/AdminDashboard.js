@@ -4,7 +4,7 @@ import TransferToken from '../Sections/TransferToken'
 import { isValidAddress } from '../Utils/helpers/CheckAddress'
 
 const AdminDashboard = () => {
-  const bal = 100
+  const bal = 1000
 
   const [sendAddress, setSendAddress] = useState('')
   const [sendAmount, setSendAmount] = useState(null)
