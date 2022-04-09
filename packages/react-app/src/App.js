@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import "./App.css";
 import Layout from "./Components/Layout";
 import UserDashboard from "./Views/UserDashboard";
 import AdminDashboard from './Views/AdminDashboard';
-import Web3 from "web3";
-import LandingPage from "./Components/LandingPage";
+// import Web3 from "web3";
+// import LandingPage from "./Components/LandingPage";
 
 function App() {
   const [page, setPage] = useState(0);
