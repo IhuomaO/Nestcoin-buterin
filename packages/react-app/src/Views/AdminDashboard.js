@@ -7,12 +7,15 @@ const AdminDashboard = () => {
   const bal = 100
 
   const [sendAddress, setSendAddress] = useState('')
-  const [sendAmount, setSendAmount] = useState(null)
+  const [sendAmount, setSendAmount] = useState(0)
   const feedback = ''
 
+  console.log(sendAddress);
+  console.log(sendAmount);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('handlesubmit');
     if (isValidAddress(sendAddress)) return
 
   }
@@ -40,6 +43,7 @@ const AdminDashboard = () => {
         submit={handleSubmit}
         buttonText='Add'
       />
+     
       <div>{feedback}</div>
 
     </div>
